@@ -39,6 +39,14 @@ room['treasure'].s_to = room['narrow']
 
 # Make a new player object that is currently in the 'outside' room.
 newPlayer = Player('Testing', room['outside'])
+newItem = Item(
+    itemName="testing item name",
+    itemDescription="testing item description",
+    playerName=None,
+    currentRoom=room['outside']
+)
+
+
 # Write a loop that:
 #
 # * Prints the current room name
@@ -50,6 +58,18 @@ newPlayer = Player('Testing', room['outside'])
 #
 # If the user enters "q", quit the game.
 def roomUpdater(roomUpdaterInput):
+    if roomUpdaterInput == 'q':
+        quit()
+    if newItem.currentRoom == newPlayer.currentRoom:
+        print("Item Here: ", newItem.itemName)
+        if input("Pick up item using p: ") == 'p':
+            newPlayer.playerItems.append(newItem)
+            print("Current User Items", str(newPlayer.playerItems))
+    if len(newPlayer.playerItems):
+        if input("Do you want to drop your current item?: ") == 'd':
+            newPlayer.playerItems.clear()
+        elif input("Press I to see current items: ") == 'i':
+            print("Current player items", repr(newPlayer.playerItems))
     if roomUpdaterInput == 'n':
         if newPlayer.currentRoom.n_to is None:
             print("there is no room to move there \n")
@@ -74,10 +94,8 @@ def roomUpdater(roomUpdaterInput):
             return newPlayer.currentRoom
         else:
             return newPlayer.currentRoom.e_to
-    if roomUpdaterInput == 'q':
-        quit()
-    if roomUpdaterInput != ('n', 's', 'w', 'e', 'q'):
-        print("\nInvalid input\n")
+    if roomUpdaterInput != ('n', 's', 'w', 'e', 'q', 'p', 'd'):
+        print("\nInvalid input\n Game Quit")
         quit()
 
 
